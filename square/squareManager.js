@@ -15,7 +15,7 @@ SquareManager.prototype.getImagesInfo = function ( ) {
         port: config.cadvisors_port
         , hostname: container.server
         , method: 'POST'
-        , path: '/api/v1.3/docker/' + container._id
+        , path: '/api/v1.3//' + container._id
     }
 
     /*httpTools.request(data, { num_stats: 2, num_samples: 0 }, function(err, data){
