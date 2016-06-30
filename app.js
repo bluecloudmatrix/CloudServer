@@ -8,6 +8,7 @@ var fs = require('fs');
 var hbs = require('hbs');
 var imagesEngine = require('./images');
 var agency = require('./agency.js');
+var monitor = require('./monitorManager.js');
 
 // handle post
 var multipart = require('connect-multiparty');
@@ -70,12 +71,24 @@ app.get('/remove', function(req, res) {
 });
 
 
+function done(err, data) {
+	console.log("done haha");
+	console.log(err);
+	console.log(data);
+}
+
+
 // basic function
 function startServer() {
 	if (serverStarted ) return;
 	serverStarted = true;
 	app.listen(port);   
 	console.log("Express server listening on port " + port);
+
+	var container = {};
+	container.server = '9.114.15.123';
+	container._id = 'abe0c4d02211675ce775b949e80f2b0519953d6c3d8eb4844a25f0e38957c54d'
+	monitor.getContainerInfo(container);
 }
 
 
