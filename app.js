@@ -7,7 +7,7 @@ var express = require('express');
 var fs = require('fs');
 var hbs = require('hbs');
 var imagesEngine = require('./images');
-var agency = require('./agency.js');
+//var agency = require('./agency.js');
 var monitor = require('./monitorManager.js');
 
 // handle post
@@ -46,14 +46,14 @@ app.engine('html', hbs.__express);
  *****************/
 
 app.post('/order', multipartMiddleware, function(req, res) {
-	agency.get_processed_data(req.body, res);
+	//agency.get_processed_data(req.body, res);
 });
 app.get('/order', function(req, res) {
-	agency.grabUsrServices(res);
+	//agency.grabUsrServices(res);
 });
 
 app.get('/services_listing', function(req, res) {
-    agency.grabUsrServices(res);
+    //agency.grabUsrServices(res);
 });
 
 app.get('/square', function(req, res) {
@@ -67,7 +67,7 @@ app.get('/deploy_setting', function(req, res) {
 
 app.get('/remove', function(req, res) {
 	var name = req.query.name;
-	agency.removeContainer(name, res)
+	//agency.removeContainer(name, res)
 });
 
 
