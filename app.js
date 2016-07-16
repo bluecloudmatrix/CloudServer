@@ -9,6 +9,7 @@ var hbs = require('hbs');
 var imagesEngine = require('./images');
 //var agency = require('./agency.js');
 var monitor = require('./monitorManager.js');
+var config = require('./conf/config.js');
 
 // handle post
 var multipart = require('connect-multiparty');
@@ -87,8 +88,31 @@ function startServer() {
 
 	var container = {};
 	container.server = '9.114.15.123';
-	container._id = 'abe0c4d02211675ce775b949e80f2b0519953d6c3d8eb4844a25f0e38957c54d'
-	monitor.getContainerInfo(container);
+	container.port =
+	container._id = '97c267a38919225efae56a4efb6db05a3b919ab0f9140250a12ddf8104b17453';
+	//monitor.getContainerInfo(container);
+	/*monitor.getStats(config.cadvisors_hostname, config.cadvisors_port, container._id, function(containerInfo, subcontainers) {
+		if (window.cadvisor.firstRun) {
+			window.cadvisor.firstRun = false;
+
+			if (containerInfo.spec.has_filesystem) {
+				startFileSystemUsage(
+						'filesystem-usage', machineInfo, containerInfo);
+			}
+			if (containerInfo.spec.has_network) {
+				startNetwork('network-selection', containerInfo);
+			}
+			if (containerInfo.spec.has_custom_metrics) {
+				startCustomMetrics('custom-metrics-chart', containerInfo);
+			}
+		}
+		drawCharts(machineInfo, containerInfo, subcontainers);
+
+		if (containerInfo.spec.has_cpu) {
+			console.log("has cpu");
+		}
+
+	});*/
 }
 
 

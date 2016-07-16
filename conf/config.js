@@ -3,4 +3,4 @@
  */
 
 exports.cadvisors_port = 8080;
-//exports.container.server = '9.114.15.123';
+exports.cadvisors_hostname = '9.114.15.123';

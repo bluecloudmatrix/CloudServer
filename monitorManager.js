@@ -34,6 +34,26 @@ MonitorManager.prototype.getResourceUsage = function(container, done)
     })
 }
 
+// Get the container stats for the specified container.
+MonitorManager.prototype.getStats = function(hostname, port, containerId, callback) {
+    // Request 60s of container history and no samples.
+    var request = JSON.stringify({
+        // Update main.statsRequestedByUI while updating "num_stats" here.
+        'num_stats': 60,
+        'num_samples': 0
+    });
+
+    var rootDir = hostname+':'+port+'/';
+
+    $.when(
+        $.post(rootDir + 'api/v1.3/containers' + containerId, request),
+        $.post(rootDir + 'api/v1.3/subcontainers' + containerId, request))
+        .done(function(containersResp, subcontainersResp) {
+            callback(containersResp[0], subcontainersResp[0]);
+        });
+}
+
+
 MonitorManager.prototype.getContainerInfo = function(container)
 {
     var data = {
@@ -50,8 +70,6 @@ MonitorManager.prototype.getContainerInfo = function(container)
         console.log(data);
     });*/
     var req = httpTools.request(data, function(res){
-        //done(err, data)
-        console.log("done haha");
         console.log('STATUS: ' + res.statusCode);
         console.log('HEADERS: ' + JSON.stringify(res.headers));
         res.setEncoding('utf8');

@@ -2,6 +2,8 @@
 <html>
 <head>
 <title>Home</title>
+
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="" />
@@ -1414,5 +1416,64 @@
 
 <!-- Bootstrap Core JavaScript -->
    <script src="js/bootstrap.min.js"></script>
+
+   <script type="text/javascript">
+	   var container = {};
+	   container.server = 'http://9.114.15.123';
+	   container.port = 8080;
+	   container._id = '97c267a38919225efae56a4efb6db05a3b919ab0f9140250a12ddf8104b17453';
+
+	   function MonitorManager(){}
+
+	   // Get the container stats for the specified container.
+	   MonitorManager.prototype.getStats = function(hostname, port, containerId, callback) {
+		   // Request 60s of container history and no samples.
+		   var request = JSON.stringify({
+			   // Update main.statsRequestedByUI while updating "num_stats" here.
+			   'num_stats': 60,
+			   'num_samples': 0
+		   });
+
+		   var rootDir = hostname+':'+port+'/';
+
+		   $.when(
+				   $.post(rootDir + 'api/v1.0/containers/docker/' + containerId, request),
+				   $.post(rootDir + 'api/v1.0/subcontainers/docker/' + containerId, request))
+				   .done(function(containersResp, subcontainersResp) {
+					   callback(containersResp[0], subcontainersResp[0]);
+				   });
+
+
+	   }
+
+	   var monitor = new MonitorManager();
+
+
+	   monitor.getStats(container.server,  container.port, container._id, function(containerInfo) {
+		   /*if (window.cadvisor.firstRun) {
+			window.cadvisor.firstRun = false;
+
+			if (containerInfo.spec.has_filesystem) {
+			startFileSystemUsage(
+			'filesystem-usage', machineInfo, containerInfo);
+			}
+			if (containerInfo.spec.has_network) {
+			startNetwork('network-selection', containerInfo);
+			}
+			if (containerInfo.spec.has_custom_metrics) {
+			startCustomMetrics('custom-metrics-chart', containerInfo);
+			}
+			}
+			drawCharts(machineInfo, containerInfo, subcontainers);*/
+
+		   if (containerInfo.spec.has_cpu) {
+			   console.log("has cpu");
+		   }
+
+		   console.log("not has cpu");
+
+	   });
+   </script>
+
 </body>
 </html>
