@@ -352,7 +352,7 @@
         this._currentIntervalStart = startDate.clone();
 
         // Filter the events list (if it exists) to events that are happening
-        // last month, this month and next month (within the current grid view).
+        // last month, this month and next month (within the current grid views).
         this.eventsLastMonth = [];
         this.eventsNextMonth = [];
         this.eventsThisInterval = [];
@@ -1322,7 +1322,7 @@
 
         // Extend any options
         options = $.extend(true, {}, defaults, options);
-        // @V2-todo Only used for legacy month view
+        // @V2-todo Only used for legacy month views
         ctx.month = moment().startOf('month');
 
         if (timeOpt.days) {

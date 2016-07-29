@@ -61,6 +61,11 @@ app.get('/square', function(req, res) {
 	res.render('square', {entries:imagesEngine.getImagesEntries()});
 });
 
+app.get('/table', function(req, res) {
+	var image_name = imagesEngine.getImagesEntry(req.query.id).image;
+	res.render('table', {id:req.query.id, name:req.query.name, image:image_name});
+});
+
 app.get('/deploy_setting', function(req, res) {
 	var image_name = imagesEngine.getImagesEntry(req.query.id).image;
 	res.render('deploy_setting', {id:req.query.id, name:req.query.name, image:image_name});

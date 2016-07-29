@@ -4072,7 +4072,7 @@
 				_index: index,
 
 
-				// Desired view properties
+				// Desired views properties
 				_model: {
 					x: this.calculateBarX(index, this.index),
 					y: reset ? yScalePoint : this.calculateBarY(index, this.index),
@@ -4380,7 +4380,7 @@
 				_datasetIndex: this.index,
 				_index: index,
 
-				// Desired view properties
+				// Desired views properties
 				_model: {
 					x: reset ? xScale.getPixelForDecimal(0.5) : xScale.getPixelForValue(this.getDataset().data[index], index, this.index, this.chart.isCombo),
 					y: reset ? scaleBase : yScale.getPixelForValue(this.getDataset().data[index], index, this.index),
@@ -4618,7 +4618,7 @@
 				_datasetIndex: this.index,
 				_index: index,
 
-				// Desired view properties
+				// Desired views properties
 				_model: reset ? resetModel : {
 					x: centerX,
 					y: centerY,
@@ -4871,7 +4871,7 @@
 				_datasetIndex: this.index,
 				_index: index,
 
-				// Desired view properties
+				// Desired views properties
 				_model: {
 					x: xScale.getPixelForValue(this.getDataset().data[index], index, this.index, this.chart.isCombo),
 					y: reset ? scaleBase : this.calculatePointY(this.getDataset().data[index], index, this.index, this.chart.isCombo),
@@ -5156,7 +5156,7 @@
 				_index: index,
 				_scale: this.chart.scale,
 
-				// Desired view properties
+				// Desired views properties
 				_model: reset ? resetModel : {
 					x: centerX,
 					y: centerY,
@@ -5340,7 +5340,7 @@
 				_index: index,
 				_scale: this.chart.scale,
 
-				// Desired view properties
+				// Desired views properties
 				_model: {
 					x: reset ? this.chart.scale.xCenter : pointPosition.x, // value not used in dataset scale, but we want a consistent API between scales
 					y: reset ? this.chart.scale.yCenter : pointPosition.y,

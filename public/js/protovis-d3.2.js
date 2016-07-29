@@ -3343,7 +3343,7 @@ pv.Scale.quantitative = function() {
   };
 
   /**
-   * Returns a view of this scale by the specified accessor function <tt>f</tt>.
+   * Returns a views of this scale by the specified accessor function <tt>f</tt>.
    * Given a scale <tt>y</tt>, <tt>y.by(function(d) d.foo)</tt> is equivalent to
    * <tt>function(d) y(d.foo)</tt>.
    *
@@ -3364,7 +3364,7 @@ pv.Scale.quantitative = function() {
    * @function
    * @name pv.Scale.quantitative.prototype.by
    * @param {function} f an accessor function.
-   * @returns {pv.Scale.quantitative} a view of this scale by the specified
+   * @returns {pv.Scale.quantitative} a views of this scale by the specified
    * accessor function.
    */
   scale.by = function(f) {
@@ -3873,7 +3873,7 @@ pv.Scale.ordinal = function() {
   };
 
   /**
-   * Returns a view of this scale by the specified accessor function <tt>f</tt>.
+   * Returns a views of this scale by the specified accessor function <tt>f</tt>.
    * Given a scale <tt>y</tt>, <tt>y.by(function(d) d.foo)</tt> is equivalent to
    * <tt>function(d) y(d.foo)</tt>. This method should be used judiciously; it
    * is typically more clear to invoke the scale directly, passing in the value
@@ -3882,7 +3882,7 @@ pv.Scale.ordinal = function() {
    * @function
    * @name pv.Scale.ordinal.prototype.by
    * @param {function} f an accessor function.
-   * @returns {pv.Scale.ordinal} a view of this scale by the specified accessor
+   * @returns {pv.Scale.ordinal} a views of this scale by the specified accessor
    * function.
    */
   scale.by = function(f) {
@@ -4041,7 +4041,7 @@ pv.Scale.quantile = function() {
   };
 
   /**
-   * Returns a view of this scale by the specified accessor function <tt>f</tt>.
+   * Returns a views of this scale by the specified accessor function <tt>f</tt>.
    * Given a scale <tt>y</tt>, <tt>y.by(function(d) d.foo)</tt> is equivalent to
    * <tt>function(d) y(d.foo)</tt>.
    *
@@ -4062,7 +4062,7 @@ pv.Scale.quantile = function() {
    * @function
    * @name pv.Scale.quantile.prototype.by
    * @param {function} f an accessor function.
-   * @returns {pv.Scale.quantile} a view of this scale by the specified
+   * @returns {pv.Scale.quantile} a views of this scale by the specified
    * accessor function.
    */
   scale.by = function(f) {
@@ -13791,7 +13791,7 @@ pv.Layout.Rollup.prototype.buildImplied = function(s) {
  * constructed directly; instead, they are added to an existing panel via
  * {@link pv.Mark#add}.
  *
- * @class Implements a network visualization using a matrix view. This is, in
+ * @class Implements a network visualization using a matrix views. This is, in
  * effect, a visualization of the graph's <i>adjacency matrix</i>: the cell at
  * row <i>i</i>, column <i>j</i>, corresponds to the link from node <i>i</i> to
  * node <i>j</i>. The fill color of each cell is binary by default, and
@@ -15235,7 +15235,7 @@ pv.Geo.scale = function(p) {
   };
 
   /**
-   * Returns a view of this scale by the specified accessor function <tt>f</tt>.
+   * Returns a views of this scale by the specified accessor function <tt>f</tt>.
    * Given a scale <tt>g</tt>, <tt>g.by(function(d) d.foo)</tt> is equivalent to
    * <tt>function(d) g(d.foo)</tt>. This method should be used judiciously; it
    * is typically more clear to invoke the scale directly, passing in the value
@@ -15244,7 +15244,7 @@ pv.Geo.scale = function(p) {
    * @function
    * @name pv.Geo.scale.prototype.by
    * @param {function} f an accessor function.
-   * @returns {pv.Geo.scale} a view of this scale by the specified accessor
+   * @returns {pv.Geo.scale} a views of this scale by the specified accessor
    * function.
    */
   scale.by = function(f) {
