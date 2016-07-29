@@ -11,10 +11,17 @@ var imagesEngine = require('./images');
 var monitor = require('./monitorManager.js');
 var config = require('./conf/config.js');
 
+var path = require('path'),
+		mongoose = require('mongoose'),
+		hash = require('./pass').hash;
+
+
 // handle post
 var multipart = require('connect-multiparty');
 var multipartMiddleware = multipart();
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
+var session = require('express-session')
 
 // port&host setting
 var settings = JSON.parse(fs.readFileSync('settings.json', 'utf8'));
@@ -26,13 +33,105 @@ var host = (process.env.VCAP_APP_HOST || 'localhost');
 var serverStarted = false;
 var app = express();
 
-// basic configuration
-app.use(express.static(__dirname + '/public'));     	// set the static files location /public/img will be /img for users
-app.use(bodyParser.urlencoded({
-	extended: true
-}));
-app.set('view engine', 'html');
+
+/*
+ Database and Models
+ */
+mongoose.connect("mongodb://localhost/myapp");
+var UserSchema = new mongoose.Schema({
+	username: String,
+	password: String,
+	salt: String,
+	hash: String
+});
+
+var User = mongoose.model('users', UserSchema);
+
+
+/*
+ Middlewares and configurations
+ */
+//app.configure(function () {
+	app.use(bodyParser());
+//app.use(bodyParser.urlencoded({
+//	extended: true
+//}));
+	app.use(cookieParser('Authentication Tutorial '));
+	app.use(session());
+	//app.use(express.static(path.join(__dirname, 'public')));
+	app.use(express.static(__dirname + '/public'));
+	//app.set('views', __dirname + '/views');
+	app.set('view engine', 'html');
 app.engine('html', hbs.__express);
+//});
+
+app.use(function (req, res, next) {
+	var err = req.session.error,
+			msg = req.session.success;
+	delete req.session.error;
+	delete req.session.success;
+	res.locals.message = '';
+	if (err) res.locals.message = '<p class="msg error">' + err + '</p>';
+	if (msg) res.locals.message = '<p class="msg success">' + msg + '</p>';
+	next();
+});
+
+/*
+ Helper Functions
+ */
+function authenticate(name, pass, fn) {
+	if (!module.parent) console.log('authenticating %s:%s', name, pass);
+
+	User.findOne({
+				username: name
+			},
+
+			function (err, user) {
+				if (user) {
+					if (err) return fn(new Error('cannot find user'));
+					hash(pass, user.salt, function (err, hash) {
+						if (err) return fn(err);
+						if (hash == user.hash) return fn(null, user);
+						fn(new Error('invalid password'));
+					});
+				} else {
+					return fn(new Error('cannot find user'));
+				}
+			});
+
+}
+
+function requiredAuthentication(req, res, next) {
+	if (req.session.user) {
+		next();
+	} else {
+		req.session.error = 'Access denied!';
+		res.redirect('/login');
+	}
+}
+
+function userExist(req, res, next) {
+	User.count({
+		username: req.body.username
+	}, function (err, count) {
+		if (count === 0) {
+			next();
+		} else {
+			req.session.error = "User Exist"
+			res.redirect("/sign");
+		}
+	});
+}
+
+
+
+// basic configuration
+//app.use(express.static(__dirname + '/public'));     	// set the static files location /public/img will be /img for users
+//app.use(bodyParser.urlencoded({
+//	extended: true
+//}));
+//app.set('view engine', 'html');
+//app.engine('html', hbs.__express);
 //app.engine('.html', require('ejs').renderFile);
 
 /******************
@@ -74,6 +173,65 @@ app.get('/deploy_setting', function(req, res) {
 app.get('/remove', function(req, res) {
 	var name = req.query.name;
 	//agency.removeContainer(name, res)
+});
+
+app.get("/sign", function (req, res) {
+	if (req.session.user) {
+		res.redirect("/");
+	} else {
+		res.render("sign");
+	}
+});
+
+app.post("/sign", userExist, function (req, res) {
+	var password = req.body.password;
+	var username = req.body.username;
+
+	console.log(password);
+	console.log(username);
+
+	hash(password, function (err, salt, hash) {
+		if (err) throw err;
+		var user = new User({
+			username: username,
+			salt: salt,
+			hash: hash,
+		}).save(function (err, newUser) {
+			if (err) throw err;
+			authenticate(newUser.username, password, function(err, user){
+				if(user){
+					req.session.regenerate(function(){
+						req.session.user = user;
+						req.session.success = 'Authenticated as ' + user.username + ' click to <a href="/logout">logout</a>. ' + ' You may now access <a href="/restricted">/restricted</a>.';
+						res.redirect('/');
+					});
+				}
+			});
+		});
+	});
+});
+
+app.get("/login", function (req, res) {
+	res.render("login");
+});
+
+app.post("/login", function (req, res) {
+	console.log("login done");
+	authenticate(req.body.username, req.body.password, function (err, user) {
+		console.log("login authenticate");
+		if (user) {
+
+			req.session.regenerate(function () {
+
+				req.session.user = user;
+				req.session.success = 'Authenticated as ' + user.username + ' click to <a href="/logout">logout</a>. ' + ' You may now access <a href="/restricted">/restricted</a>.';
+				res.redirect('/');
+			});
+		} else {
+			req.session.error = 'Authentication failed, please check your ' + ' username and password.';
+			res.redirect('/login');
+		}
+	});
 });
 
 
