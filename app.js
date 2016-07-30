@@ -211,6 +211,10 @@ app.post("/sign", userExist, function (req, res) {
 	});
 });
 
+app.get("/profile", function (req, res) {
+	res.render("profile");
+});
+
 app.get("/login", function (req, res) {
 	res.render("login");
 });
@@ -225,7 +229,7 @@ app.post("/login", function (req, res) {
 
 				req.session.user = user;
 				req.session.success = 'Authenticated as ' + user.username + ' click to <a href="/logout">logout</a>. ' + ' You may now access <a href="/restricted">/restricted</a>.';
-				res.redirect('/');
+				res.redirect('/profile');
 			});
 		} else {
 			req.session.error = 'Authentication failed, please check your ' + ' username and password.';
