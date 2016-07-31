@@ -112,3 +112,20 @@ module.exports.signRegistry = function(username, password) {
         console.log(data);
     });
 }
+
+module.exports.grabOwnImages = function(username, res) {
+    var _data = {};
+    _data.username = username;
+
+    function onResponse(data) {
+        res.render('profile', {username:username, images:data});
+        socket.off('imagesList', onResponse);
+    }
+
+    socket.on('imagesList', onResponse);
+
+    socket.emit('ownimages', _data, function (data) {
+        console.log('\tSending sign ... waiting for ACK');
+        console.log(data);
+    });
+}

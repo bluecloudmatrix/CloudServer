@@ -215,7 +215,8 @@ app.post("/sign", userExist, function (req, res) {
 
 app.get("/profile", function (req, res) {
 	var username = req.query.username;
-	res.render('profile', {username:username});
+	//res.render('profile', {username:username});
+	agency.grabOwnImages(username, res);
 });
 
 app.get("/login", function (req, res) {
