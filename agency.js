@@ -93,3 +93,22 @@ module.exports.removeContainer = function(name, res) {
     });
 
 }
+
+module.exports.signRegistry = function(username, password) {
+    var _data = {};
+    _data.username = username;
+    _data.password = password;
+
+    function onResponse(data) {
+        console.log(data);
+        socket.off('signStatus', onResponse);
+    }
+
+    socket.on('signStatus', onResponse);
+
+
+    socket.emit('sign', _data, function (data) {
+        console.log('\tSending sign ... waiting for ACK');
+        console.log(data);
+    });
+}

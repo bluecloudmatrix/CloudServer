@@ -7,7 +7,7 @@ var express = require('express');
 var fs = require('fs');
 var hbs = require('hbs');
 var imagesEngine = require('./images');
-//var agency = require('./agency.js');
+var agency = require('./agency.js');
 var monitor = require('./monitorManager.js');
 var config = require('./conf/config.js');
 
@@ -177,7 +177,7 @@ app.get('/remove', function(req, res) {
 
 app.get("/sign", function (req, res) {
 	if (req.session.user) {
-		res.redirect("/");
+		res.redirect("/profile");
 	} else {
 		res.render("sign");
 	}
@@ -189,6 +189,8 @@ app.post("/sign", userExist, function (req, res) {
 
 	console.log(password);
 	console.log(username);
+
+	agency.signRegistry(username, password);
 
 	hash(password, function (err, salt, hash) {
 		if (err) throw err;
@@ -203,7 +205,7 @@ app.post("/sign", userExist, function (req, res) {
 					req.session.regenerate(function(){
 						req.session.user = user;
 						req.session.success = 'Authenticated as ' + user.username + ' click to <a href="/logout">logout</a>. ' + ' You may now access <a href="/restricted">/restricted</a>.';
-						res.redirect('/');
+						res.redirect('/profile');
 					});
 				}
 			});
@@ -212,7 +214,8 @@ app.post("/sign", userExist, function (req, res) {
 });
 
 app.get("/profile", function (req, res) {
-	res.render("profile");
+	var username = req.query.username;
+	res.render('profile', {username:username});
 });
 
 app.get("/login", function (req, res) {
@@ -229,7 +232,7 @@ app.post("/login", function (req, res) {
 
 				req.session.user = user;
 				req.session.success = 'Authenticated as ' + user.username + ' click to <a href="/logout">logout</a>. ' + ' You may now access <a href="/restricted">/restricted</a>.';
-				res.redirect('/profile');
+				res.redirect('/profile?username='+user.username);
 			});
 		} else {
 			req.session.error = 'Authentication failed, please check your ' + ' username and password.';
@@ -238,25 +241,26 @@ app.post("/login", function (req, res) {
 	});
 });
 
-
-function done(err, data) {
-	console.log("done haha");
-	console.log(err);
-	console.log(data);
-}
-
+app.get('/logout', function (req, res) {
+	req.session.destroy(function () {
+		res.redirect('/');
+	});
+});
 
 // basic function
 function startServer() {
 	if (serverStarted ) return;
 	serverStarted = true;
-	app.listen(port);   
-	console.log("Express server listening on port " + port);
+	app.listen(port);
+	console.log("CloudServer listening on port " + port);
 
-	var container = {};
-	container.server = '9.114.15.123';
-	container.port =
-	container._id = '97c267a38919225efae56a4efb6db05a3b919ab0f9140250a12ddf8104b17453';
+	/*
+	    monitor
+	 */
+	//var container = {};
+	//container.server =
+	//container.port =
+	//container._id = '97c267a38919225efae56a4efb6db05a3b919ab0f9140250a12ddf8104b17453';
 	//monitor.getContainerInfo(container);
 	/*monitor.getStats(config.cadvisors_hostname, config.cadvisors_port, container._id, function(containerInfo, subcontainers) {
 		if (window.cadvisor.firstRun) {
@@ -281,7 +285,6 @@ function startServer() {
 
 	});*/
 }
-
 
 // start the server
 startServer();
